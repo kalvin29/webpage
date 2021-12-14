@@ -101,13 +101,13 @@ abi = [
 		"type": "function"
 	}
 ]
-address ='0xa4aa6f8f9d99720f5fc28c1da11f2a5bc6ae3fb5';
+address ='0x271f828A6604E2Fe3571F72eB824e94DAed89e38';
 ethereum.request({ method: 'eth_accounts' }).then(result => myMetaMaskWallet = result);
 
 web3js= new Web3(ethereum);
 myContract = new web3js.eth.Contract(abi,address);
 
-candidates = {'Alice': 'candidate-1', 'Bob': 'candidate-2', 'Candy': 'candidate-3'}
+candidates = {'coffee': 'candidate-1', 'tea': 'candidate-2', 'milk': 'candidate-3'}
 
 function voteForCandidate() {
   candidateName = $('#candidate').val();
