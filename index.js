@@ -101,26 +101,28 @@ abi = [
 		"type": "function"
 	}
 ]
-VotingContract = web3.eth.contract(abi);
-// In your nodejs console, execute contractInstance.address to get the address at which the contract is deployed and change the line below to use your deployed address
-contractInstance = VotingContract.at('0xa4aa6f8f9d99720f5fc28c1da11f2a5bc6ae3fb5');
+address ='0xa4aa6f8f9d99720f5fc28c1da11f2a5bc6ae3fb5';
+ethereum.request({ method: 'eth_accounts' }).then(result => myMetaMaskWallet = result);
+
+web3js= new Web3(ethereum);
+myContract = new web3js.eth.Contract(abi,address);
+
 candidates = {'Alice': 'candidate-1', 'Bob': 'candidate-2', 'Candy': 'candidate-3'}
 
 function voteForCandidate() {
   candidateName = $('#candidate').val();
-  contractInstance.voteForCandidate(candidateName, {from: web3.eth.accounts[0]},
-    function() {
-
-    });
-}
-loop=()=>{
-  let candidateNames = Object.keys(candidates);
-  for (let name of candidateNames) {
-    let val = contractInstance.totalVotesFor.call(name,(e,result)=>{
-      $(`#${candidates[name]}` ).html(result.c[0].toString());
-    })
+  console.log(candidateName);
+  myContract.methods.voteForCandidate(candidateName).send({from: myMetaMaskWallet[0]}).then(console.log);
   }
-  setTimeout(loop,1000);
 
-}
+loop=()=>{
+    let candidateNames = Object.keys(candidates);
+    for (let name of candidateNames) {
+        myContract.methods.totalVotesFor(name).call().
+        then(result => {totalvotes = result;
+        $(`#${candidates[name]}`).html(totalvotes);
+        });
+      }
+    setTimeout(loop,1000);
+  }
 loop()
